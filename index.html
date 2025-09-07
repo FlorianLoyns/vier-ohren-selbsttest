@@ -1,0 +1,349 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Selbsttest 4-Ohren-Modell (Pflegeausbildung)</title>
+  
+  <!-- Code teilweise mit ChatGPT (OpenAI) erstellt -->
+  
+  <style>
+    :root{
+      --bg:#ffffff; --fg:#000000; --muted:#f7f7f7;
+      --accent:#007bff; --accent-hover:#0056b3;
+      --warn:#ffefef; --border:#000000;
+    }
+    body{
+      font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;
+      background:var(--bg); color:var(--fg);
+      padding:20px; max-width:800px; margin:0 auto; line-height:1.55;
+    }
+    h1{ margin:0 0 8px 0; }
+    .muted{ opacity:.8; }
+    .small{ font-size:14px; }
+    .progress{ margin:16px 0 8px; font-size:14px; opacity:.85; }
+    .card{
+      border:1px solid var(--border); border-radius:10px; padding:16px; background:var(--muted);
+    }
+    .situation{ font-weight:600; margin-bottom:12px; }
+    .option{
+      background:#fff; border:1px solid #ddd; border-radius:10px;
+      padding:12px; margin:8px 0; cursor:pointer; display:flex; gap:10px; align-items:flex-start;
+      transition:border-color .2s ease, box-shadow .2s ease;
+    }
+    .option:hover{ border-color:var(--accent); box-shadow:0 1px 0 rgba(0,0,0,.04); }
+    .option input{ margin-top:3px; }
+    .controls{ display:flex; gap:12px; margin-top:16px; flex-wrap:wrap; }
+    button{
+      padding:12px 16px; font-size:16px; cursor:pointer; border:none; border-radius:8px;
+      background:var(--accent); color:#fff; transition:background .2s ease;
+    }
+    button:hover{ background:var(--accent-hover);}
+    button.secondary{ background:#e0e0e0; color:#000; }
+    .unbeantwortet{ background-color:var(--warn); border:1px solid #f59a9a; }
+    .ergebnis{
+      display:none; margin-top:24px; padding:16px; border:1px solid var(--border); border-radius:10px; background:#fff;
+    }
+    .badges{ display:flex; gap:8px; flex-wrap:wrap; margin-top:8px; }
+    .badge{ border:1px solid #ddd; border-radius:999px; padding:6px 10px; font-size:12px; background:#fafafa; }
+    @media (max-width:600px){
+      body{ padding:12px; }
+      button{ width:100%; }
+      .controls{ gap:8px; }
+    }
+  </style>
+</head>
+<body>
+
+<h1>Selbsttest: Mit welchem „Ohr“ hörst du?</h1>
+<p class="muted small">
+  Dieser Selbsttest hilft dir, dein spontanes „Hören“ nach dem 4-Ohren-Modell von Schulz von Thun zu reflektieren.
+  <br><em>Hinweis: Die Auswertung erfolgt ausschließlich im Browser. Es werden keine Daten gespeichert.</em>
+</p>
+
+<div class="progress" id="progress">Frage 1 von 12</div>
+
+<div class="card" id="frageCard">
+  <div class="situation" id="situationText"></div>
+  <form id="formAntworten" aria-labelledby="situationText"></form>
+</div>
+
+<div class="controls">
+  <button class="secondary" id="btnZurueck" type="button">Zurück</button>
+  <button id="btnWeiter" type="button">Weiter</button>
+  <button id="btnAuswerten" type="button" style="display:none;">Auswerten</button>
+</div>
+
+<div class="ergebnis" id="ergebnisBox"></div>
+
+<script>
+/* =========================
+   Daten & Hilfsfunktionen
+   ========================= */
+
+function shuffle(array){
+  for(let i=array.length-1;i>0;i--){
+    const j = Math.floor(Math.random()*(i+1));
+    [array[i],array[j]] = [array[j],array[i]];
+  }
+  return array;
+}
+
+const fragen = [
+  // 1 Übergabe
+  {
+    situation: "Es ist morgens bei der Übergabe. Deine Praxisanleiterin schaut dich direkt an, runzelt leicht die Stirn und sagt mit ernstem Ton: „Bei Frau K. musst du heute besonders gut auf die Haut achten. Da hat sich in den letzten Tagen etwas verändert.“",
+    optionen: [
+      { text: "Mist, sie hält mich wohl für nicht gründlich genug.", ohr: "Beziehungsohr" },
+      { text: "Okay, bei Frau K. gibt es konkret etwas an der Haut zu beobachten.", ohr: "Sachohr" },
+      { text: "Sie macht sich Sorgen – das Thema ist ihr wirklich wichtig.", ohr: "Selbstoffenbarungsohr" },
+      { text: "Alles klar, ich schaue heute ganz besonders genau hin.", ohr: "Appellohr" }
+    ]
+  },
+  // 2 Stationsalltag
+  {
+    situation: "Auf einer hektischen Spätschicht läufst du mit einer Kollegin durch den Flur. Sie wirkt abgehetzt, legt Akten auf den Wagen und sagt im Vorbeigehen: „Hier ist es heute ganz schön stressig.“",
+    optionen: [
+      { text: "Sie spielt auf mich an – ich gebe wohl nicht genug Gas.", ohr: "Beziehungsohr" },
+      { text: "Stimmt, die Station ist heute wirklich voll und es ist viel zu tun.", ohr: "Sachohr" },
+      { text: "Sie ist überlastet – sie braucht Unterstützung.", ohr: "Selbstoffenbarungsohr" },
+      { text: "Ich packe direkt mit an und übernehme was.", ohr: "Appellohr" }
+    ]
+  },
+  // 3 Patientenkontakt
+  {
+    situation: "Du stellst dich einem neuen Patienten vor und erklärst freundlich, dass du Auszubildender in der Pflege bist. Er mustert dich kurz und sagt mit einem leichten Schmunzeln: „Du bist aber noch sehr jung.“",
+    optionen: [
+      { text: "Er traut mir wohl nicht viel zu.", ohr: "Beziehungsohr" },
+      { text: "Fakt: Ich bin jung – er stellt es fest.", ohr: "Sachohr" },
+      { text: "Er ist unsicher, ob er sich mir anvertrauen kann.", ohr: "Selbstoffenbarungsohr" },
+      { text: "Ich zeige ruhig und klar, dass ich weiß, was ich tue.", ohr: "Appellohr" }
+    ]
+  },
+  // 4 Unterricht/Skills Lab
+  {
+    situation: "Nach einer praktischen Übung im Skills Lab kommt die Lehrkraft zu dir. Sie verschränkt die Arme, schaut dich ernst an und sagt: „Beim nächsten Mal bitte genauer auf die Hygiene achten.“",
+    optionen: [
+      { text: "Sie hält mich für schlampig – das trifft mich.", ohr: "Beziehungsohr" },
+      { text: "Offenbar habe ich Hygieneschritte nicht sauber eingehalten.", ohr: "Sachohr" },
+      { text: "Hygiene ist ihr extrem wichtig; das hat sie geärgert.", ohr: "Selbstoffenbarungsohr" },
+      { text: "Alles klar, beim nächsten Mal setze ich die Hygienepunkte bewusster um.", ohr: "Appellohr" }
+    ]
+  },
+  // 5 Visite (formell)
+  {
+    situation: "Während der Visite steht der Assistenzarzt am Bett, blickt in die Kurve und sagt knapp: „Bitte dokumentieren Sie die Vitalwerte lückenlos.“",
+    optionen: [
+      { text: "Er zweifelt an mir – der Ton fühlt sich abwertend an.", ohr: "Beziehungsohr" },
+      { text: "Anforderung: Vitalwerte vollständig dokumentieren.", ohr: "Sachohr" },
+      { text: "Er wirkt angespannt; die Doku ist ihm sehr wichtig.", ohr: "Selbstoffenbarungsohr" },
+      { text: "Ich dokumentiere ab jetzt direkt nach jeder Messung.", ohr: "Appellohr" }
+    ]
+  },
+  // 6 Patientin im Zimmer
+  {
+    situation: "Du betrittst das Zimmer einer älteren Patientin, die dich schon erwartet. Als sie dich sieht, lächelt sie erleichtert: „Schön, dass du da bist.“",
+    optionen: [
+      { text: "Sie mag mich; das fühlt sich wertschätzend an.", ohr: "Beziehungsohr" },
+      { text: "Sie nimmt meine Anwesenheit wahr – ich bin da.", ohr: "Sachohr" },
+      { text: "Sie war wohl einsam und ist jetzt erleichtert.", ohr: "Selbstoffenbarungsohr" },
+      { text: "Ich nehme mir bewusst ein paar Minuten Zeit für sie.", ohr: "Appellohr" }
+    ]
+  },
+  // 7 Pause/Peers
+  {
+    situation: "In der Pause schaut eine Mitschülerin in dein Berichtsheft, grinst und sagt halb im Scherz, halb ernst: „Du hast aber viel im Berichtsheft stehen.“",
+    optionen: [
+      { text: "Sie ist neidisch oder lästert – das sticht.", ohr: "Beziehungsohr" },
+      { text: "Ja, ich habe tatsächlich viele Einträge.", ohr: "Sachohr" },
+      { text: "Sie vergleicht sich und ist unsicher.", ohr: "Selbstoffenbarungsohr" },
+      { text: "Ich biete ihr an, zu zeigen, wie ich dokumentiere.", ohr: "Appellohr" }
+    ]
+  },
+  // 8 Pflegekraft/Anweisung
+  {
+    situation: "Nach einer Behandlung ruft dir eine erfahrene Pflegefachkraft über den Flur zu: „Den Verbandswagen musst du nachher noch auffüllen.“",
+    optionen: [
+      { text: "Sie hält mich für nachlässig – schon wieder sowas.", ohr: "Beziehungsohr" },
+      { text: "Der Wagen ist leer; Aufgabe: auffüllen.", ohr: "Sachohr" },
+      { text: "Sie ist genervt, weil das oft liegenbleibt.", ohr: "Selbstoffenbarungsohr" },
+      { text: "Ich mache das nach der Pause direkt als Erstes.", ohr: "Appellohr" }
+    ]
+  },
+  // 9 Dozentin (formell)
+  {
+    situation: "Am Ende der Stunde geht die Dozentin die Liste durch. Sie schaut zu dir, runzelt leicht die Stirn und sagt nüchtern: „Sie haben die Hausaufgabe nicht abgegeben.“",
+    optionen: [
+      { text: "Sie hält mich für unzuverlässig – unangenehm.", ohr: "Beziehungsohr" },
+      { text: "Fakt: Ich habe die Hausaufgabe nicht abgegeben.", ohr: "Sachohr" },
+      { text: "Sie ist enttäuscht oder genervt – das spürt man.", ohr: "Selbstoffenbarungsohr" },
+      { text: "Ich reiche die Hausaufgabe zeitnah nach.", ohr: "Appellohr" }
+    ]
+  },
+  // 10 Patient beim Waschen
+  {
+    situation: "Du hilfst einem Patienten morgens bei der Körperpflege. Während du mit dem Waschlappen beginnst, verzieht er das Gesicht und sagt etwas ungeduldig: „Das Wasser ist aber ziemlich kalt.“",
+    optionen: [
+      { text: "Er hält mich für unaufmerksam – das fühlt sich wie Kritik an.", ohr: "Beziehungsohr" },
+      { text: "Das Wasser ist kalt – Temperatur passt nicht.", ohr: "Sachohr" },
+      { text: "Ihm ist unbehaglich, vielleicht friert er.", ohr: "Selbstoffenbarungsohr" },
+      { text: "Ich wärme sofort frisches Wasser auf.", ohr: "Appellohr" }
+    ]
+  },
+  // 11 Feedbackgespräch
+  {
+    situation: "Nach deinem zweiten Praxistag nimmt sich die Praxisanleiterin kurz Zeit für ein Feedback. Sie lächelt und sagt: „Heute hast du selbstständiger gearbeitet als gestern.“",
+    optionen: [
+      { text: "Heißt das, gestern war ich nicht gut genug?", ohr: "Beziehungsohr" },
+      { text: "Ich habe heute mehr Aufgaben allein übernommen – das ist der Unterschied.", ohr: "Sachohr" },
+      { text: "Sie freut sich über meine Entwicklung – das tut gut.", ohr: "Selbstoffenbarungsohr" },
+      { text: "Dann halte ich dieses Niveau und plane morgen ähnlich.", ohr: "Appellohr" }
+    ]
+  },
+  // 12 Stationsküche
+  {
+    situation: "Du bringst Tabletts zurück in die Stationsküche. Eine Fachkraft spricht dich an, während sie Bestellungen einsortiert: „Denk bitte daran, die Essensbestellungen rechtzeitig abzugeben.“",
+    optionen: [
+      { text: "Sie denkt wohl, dass ich oft etwas vergesse.", ohr: "Beziehungsohr" },
+      { text: "Bestellungen haben eine Frist – das muss eingehalten werden.", ohr: "Sachohr" },
+      { text: "Sie sorgt sich, weil sonst Chaos entsteht.", ohr: "Selbstoffenbarungsohr" },
+      { text: "Ich schreibe die Bestellungen gleich nachher fertig.", ohr: "Appellohr" }
+    ]
+  }
+];
+
+// Zustand
+let index = 0;
+const selections = new Array(fragen.length).fill(null); // speichert den index in der *gemischten* Optionsliste
+const votes = { "Sachohr":0, "Beziehungsohr":0, "Selbstoffenbarungsohr":0, "Appellohr":0 };
+
+const progressEl  = document.getElementById("progress");
+const cardEl      = document.getElementById("frageCard");
+const formEl      = document.getElementById("formAntworten");
+const situationEl = document.getElementById("situationText");
+const btnBack     = document.getElementById("btnZurueck");
+const btnNext     = document.getElementById("btnWeiter");
+const btnFinish   = document.getElementById("btnAuswerten");
+const resultEl    = document.getElementById("ergebnisBox");
+
+// pro Frage die gemischte Reihenfolge zwischenspeichern
+fragen.forEach(f => f._shuffled = null);
+
+function render(){
+  progressEl.textContent = `Frage ${index + 1} von ${fragen.length}`;
+  const f = fragen[index];
+  situationEl.textContent = f.situation;
+
+  // Antworten initial einmal mischen; beim Zurück dieselbe Reihenfolge beibehalten
+  if(!f._shuffled){
+    f._shuffled = shuffle([...f.optionen]);
+  }
+  const options = f._shuffled;
+
+  formEl.innerHTML = "";
+  cardEl.classList.remove("unbeantwortet");
+
+  options.forEach((opt, i) => {
+    const id = `opt_${index}_${i}`;
+    const label = document.createElement("label");
+    label.className = "option";
+    label.htmlFor = id;
+
+    const input = document.createElement("input");
+    input.type = "radio";
+    input.name = `frage_${index}`;
+    input.id = id;
+    input.value = i; // speichere den Index in der *gemischten* Liste
+
+    if(selections[index] === i){
+      input.checked = true;
+    }
+
+    const text = document.createElement("div");
+    text.textContent = opt.text;
+
+    label.appendChild(input);
+    label.appendChild(text);
+    formEl.appendChild(label);
+  });
+
+  btnBack.style.display   = index === 0 ? "none" : "inline-block";
+  btnNext.style.display   = index < fragen.length - 1 ? "inline-block" : "none";
+  btnFinish.style.display = index === fragen.length - 1 ? "inline-block" : "none";
+}
+
+function currentSelectedIndex(){
+  const checked = formEl.querySelector('input[type="radio"]:checked');
+  if(!checked) return null;
+  return parseInt(checked.value,10); // index in der gemischten Liste
+}
+
+btnNext.addEventListener("click", () => {
+  const selIdx = currentSelectedIndex();
+  if(selIdx === null){
+    cardEl.classList.add("unbeantwortet");
+    return;
+  }
+  cardEl.classList.remove("unbeantwortet");
+  selections[index] = selIdx;
+  index++;
+  render();
+});
+
+btnBack.addEventListener("click", () => {
+  if(index > 0) index--;
+  render();
+});
+
+btnFinish.addEventListener("click", () => {
+  const selIdx = currentSelectedIndex();
+  if(selIdx === null){
+    cardEl.classList.add("unbeantwortet");
+    return;
+  }
+  cardEl.classList.remove("unbeantwortet");
+  selections[index] = selIdx;
+
+  // Zählen
+  Object.keys(votes).forEach(k => votes[k]=0);
+  for(let q=0; q<fragen.length; q++){
+    const chosenIdx = selections[q];
+    const opt = fragen[q]._shuffled[chosenIdx];
+    votes[opt.ohr]++;
+  }
+
+  const total = selections.length;
+  const sorted = Object.entries(votes).sort((a,b)=>b[1]-a[1]);
+  const haupt = sorted[0][0];
+  const perc = n => Math.round((n/total)*100);
+
+  const hinweise = {
+    "Sachohr": "Du achtest stark auf Fakten & Inhalte. Praxis: Schau neben Vitalwerten und Maßnahmen auch auf Beziehungssignale und unausgesprochene Wünsche von Patient:innen und Team.",
+    "Beziehungsohr": "Du bist sensibel für Umgangston & Wertschätzung. Praxis: Wenn dich etwas trifft, prüfe kurz: Geht es um dich – oder um die Sache? Ggf. rückfragen statt grübeln.",
+    "Selbstoffenbarungsohr": "Du nimmst Stimmungen & Bedürfnisse gut wahr. Praxis: Halte zusätzlich die Sache im Blick: Was ist konkret zu tun, zu dokumentieren oder zu entscheiden?",
+    "Appellohr": "Du hörst schnell heraus, was zu tun ist, und handelst. Praxis: Mini-Check vor dem Loslegen: Habe ich die Stimmung/Beziehung richtig gedeutet, oder war es nur ein Lagebericht?"
+  };
+
+  resultEl.innerHTML = `
+    <h2>Dein Ergebnis</h2>
+    <p>Dein aktuell dominantes Ohr: <strong>${haupt}</strong></p>
+    <div class="badges">
+      <span class="badge">Sachohr: ${votes["Sachohr"]} (${perc(votes["Sachohr"])}%)</span>
+      <span class="badge">Beziehungsohr: ${votes["Beziehungsohr"]} (${perc(votes["Beziehungsohr"])}%)</span>
+      <span class="badge">Selbstoffenbarungsohr: ${votes["Selbstoffenbarungsohr"]} (${perc(votes["Selbstoffenbarungsohr"])}%)</span>
+      <span class="badge">Appellohr: ${votes["Appellohr"]} (${perc(votes["Appellohr"])}%)</span>
+    </div>
+    <p style="margin-top:12px;"><strong>Praxis-Impuls:</strong> ${hinweise[haupt]}</p>
+    <hr/>
+    <p class="small muted"><strong>Hinweis:</strong> Dieser Selbsttest ist eine <em>Reflexionshilfe</em>, kein diagnostischer Test. Je nach Situation und Stimmung kann dein „Hören“ variieren. Lade die Seite neu, um den Test erneut zu machen.</p>
+  `;
+  resultEl.style.display = "block";
+  resultEl.scrollIntoView({ behavior:"smooth", block:"start" });
+});
+
+// Initial render
+render();
+</script>
+
+</body>
+</html>
