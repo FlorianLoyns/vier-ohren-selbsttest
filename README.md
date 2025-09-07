@@ -2,7 +2,7 @@
 
 Dieses Repository enthält einen interaktiven Selbsttest für Pflegeauszubildende im ersten Ausbildungsabschnitt, der auf dem 4-Ohren-Modell von Schulz von Thun basiert. Mithilfe des Tests sollen die Auszubildenden ihre Wahrnehmung in Kommunikationssituationen reflektieren und herausfinden, mit welchem „Ohr“ (Sach-, Beziehungs-, Selbstoffenbarungs- oder Appellohr) sie in typischen Pflege- und Lernsituationen besonders stark reagieren.
 
-**[Hier klicken, um den 4-Ohren-Selbsttest direkt online auszuprobieren!](https://FlorianLoyns.github.io/OhrenTest/)**
+**[Hier klicken, um den 4-Ohren-Selbsttest direkt online auszuprobieren!](https://FlorianLoyns.github.io/vier-ohren-selbsttest/)**
 
 ## Beschreibung
 
@@ -18,7 +18,7 @@ Nach Beantwortung aller Fragen zeigt die Auswertung an, welches Ohr bei dir am s
 
 ## Verwendung
 
-1. Öffne die Webseite über den [Link oben](https://FlorianLoyns.github.io/OhrenTest/).  
+1. Öffne die Webseite über den [Link oben](https://FlorianLoyns.github.io/vier-ohren-selbsttest/.  
 2. Lies jede Situation und wähle die Antwort, die am ehesten deiner spontanen Reaktion entspricht.  
 3. Klicke dich mit **Weiter** durch alle Szenarien.  
 4. Am Ende erhältst du eine Übersicht mit deinem dominanten Ohr und einer Prozentverteilung aller vier Ohren.  
