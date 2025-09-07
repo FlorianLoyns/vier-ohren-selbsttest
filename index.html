@@ -15,6 +15,7 @@
       font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;
       background:var(--bg); color:var(--fg);
       padding:20px; max-width:800px; margin:0 auto; line-height:1.55;
+      position: relative;
     }
     h1{ margin:0 0 8px 0; }
     .muted{ opacity:.8; }
@@ -44,14 +45,68 @@
     }
     .badges{ display:flex; gap:8px; flex-wrap:wrap; margin-top:8px; }
     .badge{ border:1px solid #ddd; border-radius:999px; padding:6px 10px; font-size:12px; background:#fafafa; }
+
+    /* QR Floating Action Button */
+    .qr-fab{
+      position: fixed; top: 20px; right: 20px;
+      background: #111; color:#fff;
+      border-radius: 999px; padding:10px 12px; 
+      font-weight:600; font-size:14px; letter-spacing:.3px;
+      border:1px solid rgba(0,0,0,.2); box-shadow:0 6px 20px rgba(0,0,0,.15);
+      cursor:pointer; display:flex; align-items:center; gap:8px; z-index:1000;
+    }
+    .qr-fab:hover{ transform: translateY(-1px); }
+    .qr-fab .dot{ width:6px; height:6px; background:#0ea5e9; border-radius:50%; }
+
+    /* QR Modal (schlank) */
+    .qr-modal-backdrop{
+      position:fixed; inset:0; background:rgba(0,0,0,.5);
+      display:none; align-items:center; justify-content:center; z-index:1001;
+    }
+    .qr-modal{
+      background:#fff; border-radius:16px; padding:20px;
+      width:min(92vw, 420px); border:1px solid #e5e7eb;
+      box-shadow:0 20px 60px rgba(0,0,0,.2);
+    }
+    .qr-modal header{
+      display:flex; justify-content:space-between; align-items:center; margin-bottom:12px;
+    }
+    .qr-modal h3{ margin:0; font-size:18px; }
+    .qr-close{ background:transparent; border:none; font-size:20px; cursor:pointer; }
+    .qr-canvas-wrap{
+      display:flex; justify-content:center; align-items:center; padding:10px; background:#fff; 
+      border:1px solid #eee; border-radius:12px; margin:8px 0 6px;
+    }
+
     @media (max-width:600px){
       body{ padding:12px; }
       button{ width:100%; }
       .controls{ gap:8px; }
+
+      /* QR-Button auf kleinen Screens ausblenden */
+      .qr-fab{ display:none; }
     }
   </style>
 </head>
 <body>
+
+<!-- Floating QR-Button (wird auf Handy ausgeblendet) -->
+<button class="qr-fab" id="qrFab" aria-haspopup="dialog" aria-controls="qrDialog" title="QR-Code öffnen">
+  <span class="dot" aria-hidden="true"></span> QR öffnen
+</button>
+
+<!-- QR-Modal -->
+<div class="qr-modal-backdrop" id="qrBackdrop" role="dialog" aria-modal="true" aria-labelledby="qrTitle">
+  <div class="qr-modal" id="qrDialog">
+    <header>
+      <h3 id="qrTitle">Seite schnell öffnen</h3>
+      <button class="qr-close" id="qrClose" aria-label="Schließen">×</button>
+    </header>
+    <div class="qr-canvas-wrap">
+      <div id="qrCanvas" aria-label="QR-Code dieser Seite"></div>
+    </div>
+  </div>
+</div>
 
 <h1>Selbsttest: Mit welchem „Ohr“ hörst du?</h1>
 <p class="muted small">
@@ -73,6 +128,9 @@
 </div>
 
 <div class="ergebnis" id="ergebnisBox"></div>
+
+<!-- QR Bibliothek via CDN -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
 
 <script>
 /* =========================
@@ -341,6 +399,31 @@ btnFinish.addEventListener("click", () => {
 
 // Initial render
 render();
+
+/* =========================
+   QR Code minimal (Button + Modal)
+   ========================= */
+const qrFab      = document.getElementById('qrFab');
+const qrBackdrop = document.getElementById('qrBackdrop');
+const qrClose    = document.getElementById('qrClose');
+const qrCanvas   = document.getElementById('qrCanvas');
+
+let qrMade = false;
+function openQR(){
+  qrBackdrop.style.display = 'flex';
+  if(!qrMade){
+    new QRCode(qrCanvas, { text: window.location.href, width: 220, height: 220, correctLevel: QRCode.CorrectLevel.H });
+    qrMade = true;
+  }
+}
+function closeQR(){ qrBackdrop.style.display = 'none'; }
+
+qrFab.addEventListener('click', openQR);
+qrClose.addEventListener('click', closeQR);
+// Klick auf Backdrop schließt Modal
+qrBackdrop.addEventListener('click', (e)=>{ if(e.target === qrBackdrop) closeQR(); });
+// Esc schließt Modal
+window.addEventListener('keydown', (e)=>{ if(e.key === 'Escape') closeQR(); });
 </script>
 
 </body>
