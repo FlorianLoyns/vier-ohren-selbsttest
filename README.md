@@ -1,7 +1,6 @@
 # 4-Ohren-Selbsttest – Welches Ohr nutzt du am meisten?
 
-Dieses Repository enthält einen interaktiven Selbsttest für Pflegeauszubildende im ersten Ausbildungsabschnitt, basierend auf dem 4-Ohren-Modell nach Schulz von Thun.  
-Ziel des Tests ist es, die eigene Wahrnehmung in Kommunikationssituationen zu reflektieren und herauszufinden, mit welchem „Ohr“ (Sach-, Beziehungs-, Selbstoffenbarungs- oder Appellohr) man in typischen Pflege- und Lernsituationen besonders stark reagiert.
+Dieses Repository enthält einen interaktiven Selbsttest für Pflegeauszubildende im ersten Ausbildungsabschnitt, der auf dem 4-Ohren-Modell von Schulz von Thun basiert. Mithilfe des Tests sollen die Auszubildenden ihre Wahrnehmung in Kommunikationssituationen reflektieren und herausfinden, mit welchem „Ohr“ (Sach-, Beziehungs-, Selbstoffenbarungs- oder Appellohr) sie in typischen Pflege- und Lernsituationen besonders stark reagieren.
 
 **[Hier klicken, um den 4-Ohren-Selbsttest direkt online auszuprobieren!](https://FlorianLoyns.github.io/OhrenTest/)**
 
