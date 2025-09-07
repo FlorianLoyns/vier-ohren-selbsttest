@@ -18,7 +18,7 @@ Nach Beantwortung aller Fragen zeigt die Auswertung an, welches Ohr bei dir am s
 
 ## Verwendung
 
-1. Öffne die Webseite über den [Link oben](https://FlorianLoyns.github.io/vier-ohren-selbsttest/.  
+1. Öffne die Webseite über den [Link oben](https://FlorianLoyns.github.io/vier-ohren-selbsttest/).  
 2. Lies jede Situation und wähle die Antwort, die am ehesten deiner spontanen Reaktion entspricht.  
 3. Klicke dich mit **Weiter** durch alle Szenarien.  
 4. Am Ende erhältst du eine Übersicht mit deinem dominanten Ohr und einer Prozentverteilung aller vier Ohren.  
