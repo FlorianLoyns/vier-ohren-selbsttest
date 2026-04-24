@@ -1,5 +1,12 @@
 # 4-Ohren-Selbsttest – Welches Ohr nutzt du am meisten?
 
+**Das eigene Hören reflektieren — zeigt dein dominantes und dein leisestes Ohr**
+
+[![Lizenz: CC BY-NC-SA 4.0](https://img.shields.io/badge/Lizenz-CC%20BY--NC--SA%204.0-lightgrey.svg)](https://creativecommons.org/licenses/by-nc-sa/4.0/deed.de)
+[![Live Demo](https://img.shields.io/badge/Live%20Demo-GitHub%20Pages-blue)](https://florianloyns.github.io/vier-ohren-selbsttest/index.html)
+![Keine Abhängigkeiten](https://img.shields.io/badge/Abh%C3%A4ngigkeiten-keine-brightgreen)
+![Modell](https://img.shields.io/badge/Modell-Schulz%20von%20Thun-teal)
+
 Dieses Repository enthält einen interaktiven Selbsttest für Pflegeauszubildende, der auf dem 4-Ohren-Modell von Friedemann Schulz von Thun basiert. Der Test zeigt, mit welchem „Ohr" (Sach-, Beziehungs-, Selbstoffenbarungs- oder Appellohr) du in typischen Pflege- und Lernsituationen bevorzugt hörst – **und welches Ohr du am seltensten nutzt.** Genau das leise Ohr ist didaktisch der spannendste Punkt: Dort liegt das Entwicklungspotenzial.
 
 **[Hier klicken, um den 4-Ohren-Selbsttest direkt online auszuprobieren!](https://FlorianLoyns.github.io/vier-ohren-selbsttest/)**
