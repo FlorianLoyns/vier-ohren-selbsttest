@@ -2,7 +2,8 @@
 <html lang="de">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <meta name="theme-color" content="#0d7377" />
 
   <meta name="description" content="Interaktiver 4-Ohren-Selbsttest für Pflegeauszubildende: 12 praxisnahe Szenarien, sofortige Auswertung – alles lokal im Browser.">
   <link rel="canonical" href="https://florianloyns.github.io/vier-ohren-selbsttest/">
@@ -17,7 +18,7 @@
   <style>
     :root{
       --bg:#ffffff; --fg:#000000; --muted:#f7f7f7;
-      --accent:#007bff; --accent-hover:#0056b3;
+      --accent:#0d7377; --accent-hover:#0a5c5f;
       --warn:#ffefef; --border:#000000;
       --note:#fffef0; --note-border:#e7d27c;
       --quiet:#f0f7ff; --quiet-border:#b3d4fc;
@@ -26,14 +27,28 @@
       font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;
       background:var(--bg); color:var(--fg);
       padding:20px; max-width:800px; margin:0 auto; line-height:1.55;
+      padding-top: max(20px, env(safe-area-inset-top));
+      padding-bottom: max(20px, env(safe-area-inset-bottom));
+      padding-left: max(20px, env(safe-area-inset-left));
+      padding-right: max(20px, env(safe-area-inset-right));
       position: relative;
+      -webkit-tap-highlight-color: transparent;
+      touch-action: manipulation;
+      accent-color: var(--accent);
     }
     h1{ margin:0 0 8px 0; }
     .muted{ opacity:.8; }
     .small{ font-size:14px; }
     .progress-wrap{ margin:16px 0 8px; }
     .progress-text{ font-size:14px; opacity:.85; margin-bottom:4px; }
-    progress{ width:100%; height:10px; }
+    progress{
+      width:100%; height:10px;
+      -webkit-appearance:none; appearance:none; border:none; border-radius:5px;
+      background:#e6efef; overflow:hidden;
+    }
+    progress::-webkit-progress-bar{ background:#e6efef; border-radius:5px; }
+    progress::-webkit-progress-value{ background:var(--accent); border-radius:5px; transition:width .25s ease; }
+    progress::-moz-progress-bar{ background:var(--accent); border-radius:5px; }
     .card{
       border:1px solid var(--border); border-radius:10px; padding:16px; background:var(--muted);
     }
@@ -72,7 +87,13 @@
     footer a{ color:inherit; }
 
     @media (max-width:600px){
-      body{ padding:12px; }
+      body{
+        padding:12px;
+        padding-top: max(12px, env(safe-area-inset-top));
+        padding-bottom: max(12px, env(safe-area-inset-bottom));
+        padding-left: max(12px, env(safe-area-inset-left));
+        padding-right: max(12px, env(safe-area-inset-right));
+      }
       button{ width:100%; }
       .controls{ gap:8px; }
     }
@@ -425,7 +446,6 @@ btnFinish.addEventListener("click", () => {
 
 // Initial render
 render();
-window.addEventListener('keydown', (e)=>{ if(e.key === 'Escape') closeQR(); });
 </script>
 
 <footer>
