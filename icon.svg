@@ -1,0 +1,31 @@
+<svg viewBox="0 0 512 512" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Vier-Ohren-Selbsttest">
+  <!-- Teal-Hintergrund -->
+  <rect width="512" height="512" fill="#0d7377"/>
+
+  <!-- Großes weißes Quadrat (Nachricht) -->
+  <rect x="80" y="80" width="352" height="352" rx="28" fill="white"/>
+
+  <!-- 2x2-Trennlinien -->
+  <line x1="256" y1="80"  x2="256" y2="432" stroke="#0d7377" stroke-width="6"/>
+  <line x1="80"  y1="256" x2="432" y2="256" stroke="#0d7377" stroke-width="6"/>
+
+  <!-- Sektor oben links: Sachebene = i (Information) -->
+  <text x="168" y="200"
+        font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif"
+        font-size="86" font-weight="800" fill="#0a5c5f"
+        text-anchor="middle" font-style="italic">i</text>
+
+  <!-- Sektor oben rechts: Selbstoffenbarung = Punkt + Ring -->
+  <circle cx="344" cy="168" r="20" fill="#0a5c5f"/>
+  <circle cx="344" cy="168" r="36" fill="none" stroke="#0a5c5f" stroke-width="6"/>
+
+  <!-- Sektor unten links: Beziehung = zwei verbundene Punkte -->
+  <circle cx="148" cy="344" r="18" fill="#0a5c5f"/>
+  <circle cx="208" cy="344" r="18" fill="#0a5c5f"/>
+  <line x1="148" y1="344" x2="208" y2="344" stroke="#0a5c5f" stroke-width="6"/>
+
+  <!-- Sektor unten rechts: Appell = Pfeil -->
+  <path d="M 308 344 L 380 344 M 360 326 L 380 344 L 360 362"
+        stroke="#0a5c5f" stroke-width="8" fill="none"
+        stroke-linecap="round" stroke-linejoin="round"/>
+</svg>

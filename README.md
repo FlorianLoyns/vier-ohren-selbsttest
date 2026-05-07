@@ -6,6 +6,7 @@
 [![Live Demo](https://img.shields.io/badge/Live%20Demo-GitHub%20Pages-blue)](https://florianloyns.github.io/vier-ohren-selbsttest/index.html)
 ![Keine Abhängigkeiten](https://img.shields.io/badge/Abh%C3%A4ngigkeiten-keine-brightgreen)
 ![Modell](https://img.shields.io/badge/Modell-Schulz%20von%20Thun-teal)
+![PWA](https://img.shields.io/badge/PWA-offline--f%C3%A4hig-teal)
 
 Dieses Repository enthält einen interaktiven Selbsttest für Pflegeauszubildende, der auf dem 4-Ohren-Modell von Friedemann Schulz von Thun basiert. Der Test zeigt, mit welchem „Ohr" (Sach-, Beziehungs-, Selbstoffenbarungs- oder Appellohr) du in typischen Pflege- und Lernsituationen bevorzugt hörst – **und welches Ohr du am seltensten nutzt.** Genau das leise Ohr ist didaktisch der spannendste Punkt: Dort liegt das Entwicklungspotenzial.
 
@@ -45,6 +46,7 @@ Aktueller Webbrowser (Chrome, Firefox, Safari, Edge). Keine zusätzliche Softwar
 - Die Antwortoptionen werden pro Frage zufällig gemischt (Reihenfolge bleibt beim Zurückblättern erhalten).
 - Die Auswertung erfolgt ausschließlich im Browser. Es werden keine Daten gespeichert oder übertragen.
 - Keine externen Abhängigkeiten – läuft vollständig offline im Browser.
+- **PWA**: installierbar auf Desktop und Smartphone, offline-fähig via Service Worker.
 
 ---
 
